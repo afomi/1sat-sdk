@@ -378,7 +378,9 @@ export const sendMandala: Action<SendMandalaInput, SendMandalaResult> = {
 			})
 			const recipientOutput: CreateActionOutput = {
 				lockingScript: Mandala.value(mandalaWireId(tokenId), amount, {
-					lock: new P2PKH().lock(PublicKey.fromString(publicKey).toAddress()),
+					lock: new P2PKH().lock(
+						PublicKey.fromString(publicKey).toAddress(ctx.chain),
+					),
 				})
 					.lock()
 					.toHex(),

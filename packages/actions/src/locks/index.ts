@@ -232,7 +232,7 @@ export const lockBsv: Action<LockBsvInput, LockOperationResponse> = {
 				counterparty: 'self',
 				forSelf: true,
 			})
-			const lockAddress = PublicKey.fromString(publicKey).toAddress()
+			const lockAddress = PublicKey.fromString(publicKey).toAddress(ctx.chain)
 
 			const outputs: CreateActionOutput[] = []
 			for (const req of requests) {

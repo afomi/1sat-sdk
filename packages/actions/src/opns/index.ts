@@ -587,7 +587,7 @@ export const deregisterOpns: Action<
 				counterparty: 'self',
 				forSelf: true,
 			})
-			const address = PublicKey.fromString(publicKey).toAddress()
+			const address = PublicKey.fromString(publicKey).toAddress(ctx.chain)
 			const tags = opnsFileTags(output)
 			const name = nameFromOutput(output)
 			const inputId = readAssetIdTag(output.tags)
@@ -803,7 +803,7 @@ export const sendOpns: Action<SendOpnsRequest, OpnsOperationResponse> = {
 					counterparty: input.counterparty,
 					forSelf: isSelf,
 				})
-				recipientAddress = PublicKey.fromString(publicKey).toAddress()
+				recipientAddress = PublicKey.fromString(publicKey).toAddress(ctx.chain)
 			} else {
 				recipientAddress = input.address as string
 			}

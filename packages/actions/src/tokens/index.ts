@@ -674,7 +674,9 @@ export const sendBsv21: Action<SendBsv21Input, TokenOperationResponse> = {
 					counterparty: 'self',
 					forSelf: true,
 				})
-				const changeAddress = PublicKey.fromString(publicKey).toAddress()
+				const changeAddress = PublicKey.fromString(publicKey).toAddress(
+					ctx.chain,
+				)
 				const changeLockingScript = p2pkh.lock(changeAddress)
 				const changeScript = BSV21.transfer(tokenId, change).lock(
 					changeLockingScript,
@@ -938,7 +940,9 @@ export const buyBsv21: Action<PurchaseBsv21Request, TokenOperationResponse> = {
 				counterparty: 'self',
 				forSelf: true,
 			})
-			const ourTokenAddress = PublicKey.fromString(publicKey).toAddress()
+			const ourTokenAddress = PublicKey.fromString(publicKey).toAddress(
+				ctx.chain,
+			)
 
 			const p2pkh = new P2PKH()
 			const buyerLockingScript = p2pkh.lock(ourTokenAddress)

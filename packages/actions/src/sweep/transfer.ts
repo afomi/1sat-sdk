@@ -46,7 +46,7 @@ async function transferWithLegacyFunding(
 
 	const tx = new Transaction()
 	const p2pkh = new P2PKH()
-	const sourceAddress = privateKey.toPublicKey().toAddress()
+	const sourceAddress = privateKey.toPublicKey().toAddress(ctx.chain)
 
 	// Add ordinal inputs — order matters for satoshi position mapping
 	for (const ord of ordinals) {

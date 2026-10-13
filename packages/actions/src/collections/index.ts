@@ -338,7 +338,7 @@ export const mintCollection: Action<MintCollectionInput, MintCollectionOutput> =
 					counterparty: 'self',
 					forSelf: true,
 				})
-				const address = PublicKey.fromString(publicKey).toAddress()
+				const address = PublicKey.fromString(publicKey).toAddress(ctx.chain)
 
 				const map = buildCollectionMap(input)
 				const lockingScript = buildInscriptionScript(
@@ -501,7 +501,7 @@ export const mintCollectionItem: Action<
 				counterparty: 'self',
 				forSelf: true,
 			})
-			const address = PublicKey.fromString(publicKey).toAddress()
+			const address = PublicKey.fromString(publicKey).toAddress(ctx.chain)
 
 			const map = buildCollectionItemMap(input)
 			const lockingScript = buildInscriptionScript(
