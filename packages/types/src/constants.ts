@@ -1,4 +1,5 @@
 import { ORD_LOCK_V2_ARTIFACT } from './ordlockV2Artifact.js'
+import { isValidOutpoint, normalizeOutpoint } from './outpoint.js'
 import type { RunarConstructorSlot } from './runar.js'
 
 /**
@@ -375,7 +376,7 @@ export function buildExternalInputLabel(
 	if (!op || /\s/.test(op)) {
 		throw new Error('External input outpoint must be a single token')
 	}
-	if (!isOutpointToken(op)) {
+	if (!isValidOutpoint(op)) {
 		throw new Error('External input label requires an outpoint-shaped token')
 	}
 	return `p ${scheme} input ${op}`
@@ -434,7 +435,7 @@ export function parseOneInputLabel(
 	// Held: `input id <key>`
 	if (payload.startsWith('id ')) {
 		const key = payload.slice(3).trim()
-		if (!key || /\s/.test(key) || isOutpointToken(key)) return undefined
+		if (!key || /\s/.test(key) || isValidOutpoint(key)) return undefined
 		return {
 			kind: 'id',
 			scheme: schemeTok,
@@ -444,29 +445,15 @@ export function parseOneInputLabel(
 	}
 
 	// External: single outpoint-shaped token only
-	if (!payload.includes(' ') && isOutpointToken(payload)) {
+	if (!payload.includes(' ') && isValidOutpoint(payload)) {
 		return {
 			kind: 'outpoint',
 			scheme: schemeTok,
-			outpoint: normalizeOutpointDot(payload),
+			outpoint: normalizeOutpoint(payload),
 		}
 	}
 
 	return undefined
-}
-
-function isOutpointToken(s: string): boolean {
-	if (s.length < 66) return false
-	const sep = s[64]
-	if (sep !== '.' && sep !== '_') return false
-	const txid = s.slice(0, 64)
-	const vout = s.slice(65)
-	return /^[0-9a-fA-F]{64}$/.test(txid) && /^\d+$/.test(vout)
-}
-
-function normalizeOutpointDot(s: string): string {
-	if (s.length >= 66 && s[64] === '_') return `${s.slice(0, 64)}.${s.slice(65)}`
-	return s
 }
 
 /**

@@ -6,7 +6,7 @@
  * Ingress (internalizeOpns / buyOpns) stamps full tags including id:.
  */
 
-import { Inscription, OpNS, OrdLockV2, outpointToBytes } from '@1sat/templates'
+import { Inscription, OpNS, OrdLockV2 } from '@1sat/templates'
 import {
 	IDENTITY_FIELD,
 	OPNS_BASKET,
@@ -19,6 +19,8 @@ import {
 	buildInputAssetLabel,
 	formatOrdinalOutpoint,
 	opnsRegisterKeyId,
+	outpointToWire,
+	parseOutpoint,
 	readAssetIdTag,
 } from '@1sat/types'
 import { encodeProfile } from '@1sat/utils'
@@ -452,10 +454,8 @@ export const registerOpns: Action<RegisterOpnsRequest, OpnsOperationResponse> =
 				const avatarOutpoint = input.profile?.avatar
 				let avatar: number[] | undefined
 				if (avatarOutpoint?.trim()) {
-					const bytes = outpointToBytes(formatOrdinalOutpoint(avatarOutpoint))
-					if (!bytes)
-						throw new Error(`invalid avatar outpoint: ${avatarOutpoint}`)
-					avatar = bytes
+					const { txid, vout } = parseOutpoint(avatarOutpoint.trim())
+					avatar = Array.from(outpointToWire(txid, vout))
 				}
 				// Key/value fields on the plain PushDrop template; this action owns
 				// the layout.

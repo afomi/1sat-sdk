@@ -7,7 +7,7 @@
 import { BSV20, BSV21, OrdLock, OrdLockV2 } from '@1sat/templates'
 import type { IndexedOutput } from '@1sat/types'
 import type { OrdfsMetadata } from '@1sat/types'
-import { formatOutpoint, parseOutpoint } from '@1sat/utils'
+import { formatOutpoint, parseOutpoint } from '@1sat/types'
 import {
 	type CreateActionOutput,
 	P2PKH,

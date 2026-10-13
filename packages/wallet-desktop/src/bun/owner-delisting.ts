@@ -2,7 +2,7 @@ import { isListedOutput } from '@1sat/actions'
 import type { OneSatServices } from '@1sat/client'
 import { OrdLock } from '@1sat/templates'
 import { type IndexedOutput, OPNS_BASKET, ORDINALS_BASKET } from '@1sat/types'
-import { parseOutpoint } from '@1sat/utils'
+import { parseOutpoint } from '@1sat/types'
 import {
 	P2PKH,
 	Transaction,

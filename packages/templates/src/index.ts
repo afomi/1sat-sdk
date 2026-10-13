@@ -21,16 +21,6 @@ export type {
 	MandalaRole,
 	MandalaToken,
 } from './mandala/mandala.js'
-export { default as Shrug, SHRUG_TAG_HEX } from './shrug/shrug.js'
-export type { ShrugData } from './shrug/shrug.js'
-export {
-	SHRUG_METADATA_CONTENT_TYPE,
-	decodeShrugMetadata,
-	encodeShrugMetadata,
-	outpointFromBytes,
-	outpointToBytes,
-} from './shrug/metadata.js'
-export type { ShrugMetadata } from './shrug/metadata.js'
 export { default as OrdLock } from './ordlock/ordlock.js'
 export { default as OrdLockV2 } from './ordlock/ordlockV2.js'
 export {

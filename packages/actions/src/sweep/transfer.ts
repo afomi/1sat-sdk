@@ -6,7 +6,7 @@
  * via createAction.
  */
 
-import { parseOutpoint } from '@1sat/utils'
+import { parseOutpoint } from '@1sat/types'
 import { P2PKH, PrivateKey, Transaction } from '@bsv/sdk'
 import type { OneSatContext } from '../types.js'
 import type { SweepInput } from './types.js'

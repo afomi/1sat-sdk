@@ -14,7 +14,7 @@ import {
 	type TokenStatus,
 	readAssetIdTag,
 } from '@1sat/types'
-import { parseOutpoint } from '@1sat/utils'
+import { parseOutpoint } from '@1sat/types'
 import {
 	BigNumber,
 	type CreateActionArgs,

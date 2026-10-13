@@ -1,3 +1,4 @@
+import { outpointToWire, parseOutpoint, txidFromWire } from '@1sat/types'
 import {
 	LockingScript,
 	OP,
@@ -7,7 +8,6 @@ import {
 	type ScriptTemplate,
 	type Transaction,
 	type UnlockingScript,
-	Utils,
 } from '@bsv/sdk'
 import {
 	decode as dagCborDecode,
@@ -283,18 +283,12 @@ function readU32le(b: Uint8Array, at: number): number {
 
 /** `txid_vout` → 36 bytes (natural-order txid ‖ uint32 LE vout) */
 function outpointBytes(outpoint: string): Uint8Array {
-	const m = /^([0-9a-fA-F]{64})_(\d+)$/.exec(outpoint)
-	if (!m) throw new Error(`invalid outpoint: ${outpoint}`)
-	const vout = Number(m[2])
-	if (vout > 0xffffffff) throw new Error(`invalid outpoint: ${outpoint}`)
-	return Uint8Array.from([
-		...Utils.toArray(m[1].toLowerCase(), 'hex').reverse(),
-		...u32le(vout),
-	])
+	const { txid, vout } = parseOutpoint(outpoint)
+	return outpointToWire(txid, vout)
 }
 
 function outpointString(bytes: Uint8Array): string {
-	const txid = Utils.toHex(Array.from(bytes.subarray(0, 32)).reverse())
+	const txid = txidFromWire(bytes.subarray(0, 32))
 	return `${txid}_${bytes.length === 36 ? readU32le(bytes, 32) : 0}`
 }
 

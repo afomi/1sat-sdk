@@ -23,7 +23,7 @@ import type {
 	Royalty,
 } from '@1sat/types'
 import { P1SAT_PROTOCOL } from '@1sat/types'
-import { parseOutpoint } from '@1sat/utils'
+import { parseOutpoint } from '@1sat/types'
 import { P2PKH, PublicKey, Script, Utils } from '@bsv/sdk'
 import { prepareP1SatArgs } from '../apply/index.js'
 import { MAX_INSCRIPTION_BYTES, ORDINALS_BASKET } from '../constants.js'

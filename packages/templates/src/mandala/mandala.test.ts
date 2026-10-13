@@ -54,7 +54,6 @@ describe('Mandala token ids', () => {
 		expect(() => Mandala.idToString([...ID0_BYTES, 0, 0, 0, 0])).toThrow()
 		expect(() => Mandala.idToString(ID0_BYTES.slice(1))).toThrow()
 		expect(() => Mandala.idFromString(TXID)).toThrow()
-		expect(() => Mandala.idFromString(`${TXID}.0`)).toThrow()
 		expect(() => Mandala.idFromString(`${TXID}_4294967296`)).toThrow()
 	})
 })

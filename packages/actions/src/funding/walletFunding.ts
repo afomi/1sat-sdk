@@ -1,4 +1,4 @@
-import { parseOutpoint } from '@1sat/utils'
+import { parseOutpoint } from '@1sat/types'
 import {
 	type AtomicBEEF,
 	Beef,
