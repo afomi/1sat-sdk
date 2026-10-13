@@ -86,6 +86,7 @@
       "version": "0.0.63",
       "dependencies": {
         "@1sat/types": "workspace:*",
+        "@1sat/utils": "workspace:*",
         "@bsv/wallet-toolbox-client": "npm:@bopen-io/wallet-toolbox-client@2.14.8",
       },
       "devDependencies": {
