@@ -1,6 +1,10 @@
 import { MAP_PREFIX } from '@1sat/templates'
 import { Indexer, type ParseResult, type Txo } from '@1sat/types'
-import { OP, Script, Utils } from '@bsv/sdk'
+import { OP, Script, type ScriptChunk, Utils } from '@bsv/sdk'
+
+// "|" separates Bitcom protocols within one OP_RETURN.
+const isPipe = (chunk: ScriptChunk) =>
+	chunk.data?.length === 1 && chunk.data[0] === 0x7c
 
 export class MapIndexer extends Indexer {
 	tag = 'map'
@@ -33,9 +37,7 @@ export class MapIndexer extends Indexer {
 				return map ? { data: map, tags } : undefined
 			}
 
-			const pipePos = chunks.findIndex(
-				(chunk) => chunk.data?.length === 1 && chunk.data[0] !== 0x7c,
-			)
+			const pipePos = chunks.findIndex(isPipe)
 			if (pipePos > -1) {
 				chunks = chunks.slice(pipePos + 1)
 			} else break
@@ -53,10 +55,7 @@ export class MapIndexer extends Indexer {
 		const map: { [key: string]: unknown } = {}
 		for (let i = mapPos + 1; i < script.chunks.length; i += 2) {
 			const chunk = script.chunks[i]
-			if (
-				chunk.op === OP.OP_RETURN ||
-				(chunk.data?.length === 1 && chunk.data[0] !== 0x7c)
-			) {
+			if (chunk.op === OP.OP_RETURN || isPipe(chunk)) {
 				break
 			}
 
