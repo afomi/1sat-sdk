@@ -32,33 +32,33 @@ export class SigmaIndexer extends Indexer {
 	async parse(txo: Txo): Promise<ParseResult | undefined> {
 		const script = txo.output.lockingScript
 		const vout = txo.outpoint.vout
-		let retPos = 0
 		const sigmas: Sigma[] = []
 
-		for (let i = retPos + 1; i < script.chunks.length; i++) {
-			const chunk = script.chunks[i]
-			if (!retPos && chunk.op === OP.OP_RETURN) {
-				retPos = i
-				continue
-			}
-			if (!retPos || chunk.data?.length !== 1 || chunk.data[0] !== 0x7c) {
+		const retPos = script.chunks.findIndex((chunk) => chunk.op === OP.OP_RETURN)
+		if (retPos < 0) return
+		// Outside a conditional, @bsv/sdk keeps everything after OP_RETURN as the
+		// OP_RETURN chunk's data, so read the pushes from there.
+		const retData = script.chunks[retPos].data
+		const chunks = retData?.length
+			? Script.fromBinary(retData).chunks
+			: script.chunks.slice(retPos + 1)
+
+		for (let i = 0; i < chunks.length; i++) {
+			const chunk = chunks[i]
+			if (chunk.data?.length !== 1 || chunk.data[0] !== 0x7c) {
 				continue
 			}
 
-			if (Utils.toUTF8(script.chunks[++i]?.data || []) !== 'SIGMA') {
+			if (Utils.toUTF8(chunks[++i]?.data || []) !== 'SIGMA') {
 				continue
 			}
 
 			const sigma: Sigma = {
-				algorithm: script.chunks[++i]?.data
-					? Utils.toUTF8(script.chunks[i].data || [])
-					: '',
-				address: script.chunks[++i]?.data
-					? Utils.toUTF8(script.chunks[i].data || [])
-					: '',
-				signature: script.chunks[++i]?.data || [],
-				vin: script.chunks[++i]?.data
-					? Number.parseInt(Utils.toUTF8(script.chunks[i].data || []))
+				algorithm: chunks[++i]?.data ? Utils.toUTF8(chunks[i].data || []) : '',
+				address: chunks[++i]?.data ? Utils.toUTF8(chunks[i].data || []) : '',
+				signature: chunks[++i]?.data || [],
+				vin: chunks[++i]?.data
+					? Number.parseInt(Utils.toUTF8(chunks[i].data || []))
 					: -1,
 				valid: false, // Will be validated in summarize()
 			}
